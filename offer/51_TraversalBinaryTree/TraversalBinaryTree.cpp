@@ -7,16 +7,16 @@
 
 using namespace std;
 //二叉树的遍历
-void Preorder(struct BinaryTreeNode* node)
+void PreorderRecursion(struct BinaryTreeNode* node)
 {
 	if (node != NULL) {
 		printf("%d\t", node->m_nValue);
-		Preorder(node->m_pLeft);
-		Preorder(node->m_pRight);
+		PreorderRecursion(node->m_pLeft);
+		PreorderRecursion(node->m_pRight);
 	}
 }
 
-void Preorder2(struct BinaryTreeNode* root)
+void Preorder(struct BinaryTreeNode* root)
 {
 	std::stack<BinaryTreeNode*> _stack;
 	while ((root != NULL) || !_stack.empty())
@@ -36,16 +36,16 @@ void Preorder2(struct BinaryTreeNode* root)
 	}
 }
 
-void Postorder(struct BinaryTreeNode* node)
+void PostorderRecursion(struct BinaryTreeNode* node)
 {
 	if(node != NULL) {
-		Postorder(node->m_pLeft);
-		Postorder(node->m_pRight);
+		PostorderRecursion(node->m_pLeft);
+		PostorderRecursion(node->m_pRight);
 		printf("%d\t", node->m_nValue);
 	}
 }
 
-void Postorder2(BinaryTreeNode *root)    //非递归后序遍历
+void Postorder(BinaryTreeNode *root)    //非递归后序遍历
 {
     stack<BinaryTreeNode*> s;
     BinaryTreeNode *p = root;
@@ -77,12 +77,12 @@ void Postorder2(BinaryTreeNode *root)    //非递归后序遍历
     }
 }
 
-void Inorder1(struct BinaryTreeNode* node)
+void InorderRecursion(struct BinaryTreeNode* node)
 {
     if(node != NULL) {
-        Inorder1(node->m_pLeft);
+        InorderRecursion(node->m_pLeft);
         printf("%d\t", node->m_nValue);
-        Inorder1(node->m_pRight);
+        InorderRecursion(node->m_pRight);
     }
 }
 
@@ -124,19 +124,19 @@ void Test2()
     ConnectTreeNodes(pNode10, pNode5, pNode12);
     ConnectTreeNodes(pNode5, pNode4, pNode7);
     
+    PreorderRecursion(pNode10);
+    printf("\n");
     Preorder(pNode10);
     printf("\n");
-    Preorder2(pNode10);
-    printf("\n");
 
-    Inorder1(pNode10);
+    InorderRecursion(pNode10);
     printf("\n");
     Inorder(pNode10);
     printf("\n");
     
-    Postorder(pNode10);
+    PostorderRecursion(pNode10);
     printf("\n");
-    Postorder2(pNode10);
+    Postorder(pNode10);
     printf("\n");
     
     
