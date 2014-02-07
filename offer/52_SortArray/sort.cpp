@@ -17,11 +17,9 @@ void MySwap(T& a, T& b)
 int partition(int *data, int left, int right)
 {
     int length = right - left + 1;
-
     int index = left;
-    MySwap<int>(data[left], data[right]);
-
     int small = left - 1;
+    
     for(int i = left; i < right; i++) {
         if(data[i] < data[right]) {
             if(small != i) {
@@ -52,9 +50,8 @@ void mergearray(int a[], int first, const int mid, const int last)
     int i = first, j = mid + 1;
     int m = mid,   n = last;
     int k = 0;
-    //int temp[8+1];
-	//int* temp = (int*)malloc(last+1);
-	int* temp = new int[last+1];
+    int* temp = new int[last+1];
+    
     while (i <= m && j <= n)
     {
         if (a[i] < a[j])
@@ -72,8 +69,7 @@ void mergearray(int a[], int first, const int mid, const int last)
     for (i = 0; i < k; i++)
         a[first + i] = temp[i];
 
-	delete temp;
-	//free(temp);
+    delete temp;
 }
 
 void mergesort(int a[], int first, int last)
@@ -104,14 +100,14 @@ void Insertsort(int a[], int n)
 //////////////////////////////Ã°ÅÝÅÅÐò/////////////////////////
 void BubbleSort(int a[], int n)
 {
-       int i, j;
-       for (i = 0; i < n; i++)                         //n
-              for (j = 1; j < n - i; j++)
-                     if (a[j - 1] > a[j]) {
-                         int temp = a[j - 1];
-                         a[j-1] = a[j];
-                         a[j] = temp;
-                     }
+    int i, j;
+    for (i = 0; i < n; i++)                         //n
+        for (j = 1; j < n - i; j++)
+             if (a[j - 1] > a[j]) {
+                 int temp = a[j - 1];
+                 a[j-1] = a[j];
+                 a[j] = temp;
+             }
 }
 
 void printArray(int* array, int length, const char* description)

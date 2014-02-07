@@ -7,7 +7,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
-
+#include <vector>
 #include "List.h"
 
 ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
@@ -33,6 +33,32 @@ ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
     return pMergedHead;
 }
 
+std::vector<ListNode*> MergeUsingLoop(ListNode* pHead1, ListNode* pHead2)
+{
+    std::vector<ListNode*> v;
+
+    while (pHead1&& pHead2) {
+        if (pHead1->m_nValue < pHead2->m_nValue)
+            v.push_back(pHead1);
+        else
+            v.push_back(pHead2);
+
+        pHead1 = pHead1->m_pNext;
+        pHead2 = pHead2->m_pNext;
+    }
+
+    while(pHead1) {
+        v.push_back(pHead1);
+        pHead1 = pHead1->m_pNext;
+    }
+
+    while(pHead2) {
+        v.push_back(pHead2);
+        pHead2 = pHead2->m_pNext;
+    }
+
+    return v;
+}
 // ====================²âÊÔŽúÂë====================
 ListNode* Test(char* testName, ListNode* pHead1, ListNode* pHead2)
 {
@@ -49,6 +75,15 @@ ListNode* Test(char* testName, ListNode* pHead1, ListNode* pHead2)
     ListNode* pMergedHead = Merge(pHead1, pHead2);
     PrintList(pMergedHead);
     
+    printf("\n\n");
+
+    printf("The merged list is (using loop):\n");
+    std::vector<ListNode*> v = MergeUsingLoop(pHead1, pHead2);
+    std::vector<ListNode*>::iterator i = v.begin();
+    
+    for (; i != v.end(); i++)
+        printf("%d\t", (*i)->m_nValue);
+
     printf("\n\n");
 
     return pMergedHead;
