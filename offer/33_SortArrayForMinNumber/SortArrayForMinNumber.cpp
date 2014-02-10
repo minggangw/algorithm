@@ -23,7 +23,7 @@ void PrintMinNumber(int* numbers, int length)
     if(numbers == NULL || length <= 0)
         return;
  
-    char** strNumbers = (char**)(new int[length]);
+    char** strNumbers = new char*[length];
     for(int i = 0; i < length; ++i)
     {
         strNumbers[i] = new char[g_MaxNumberLength + 1];
@@ -48,7 +48,7 @@ int compare(const void* strNumber1, const void* strNumber2)
 {
     // [strNumber1][strNumber2]
     strcpy(g_StrCombine1, *(const char**)strNumber1);
-    strcat(g_StrCombine1, *(const char**)strNumber2);
+    strcat(g_StrCombine1,  *(const char**)strNumber2);
  
     // [strNumber2][strNumber1]
     strcpy(g_StrCombine2, *(const char**)strNumber2);
