@@ -19,20 +19,17 @@ void PreorderRecursion(struct BinaryTreeNode* node)
 void Preorder(struct BinaryTreeNode* root)
 {
 	std::stack<BinaryTreeNode*> _stack;
-	while ((root != NULL) || !_stack.empty())
-	{
-		if(root != NULL)
-		{
-			_stack.push(root);
-		    printf("%d\t", root->m_nValue);
-			root = root->m_pLeft;
-		}
-		else
-		{
-			root = _stack.top();
-			_stack.pop();
-			root = root->m_pRight;
-		}
+	while (root || !_stack.empty()) {
+        while (root) {
+            printf("%d\t", root->m_nValue);
+            _stack.push(root);
+            root = root->m_pLeft;
+        }
+        if (!_stack.empty()) {
+            root = _stack.top();
+            _stack.pop();
+            root = root->m_pRight;
+        }
 	}
 }
 
@@ -50,26 +47,21 @@ void Postorder(BinaryTreeNode *root)    //非递归后序遍历
     stack<BinaryTreeNode*> s;
     BinaryTreeNode *p = root;
     BinaryTreeNode *temp;
-    while(p!=NULL||!s.empty())
-    {
-        while(p!=NULL)              //沿左子树一直往下搜索，直至出现没有左子树的结点
-        {
+
+    while (p ||!s.empty()) {
+        while (p) {             //沿左子树一直往下搜索，直至出现没有左子树的结点
             p->m_isFirst = true;
             s.push(p);
             p = p->m_pLeft;
         }
-        if(!s.empty())
-        {
+        if (!s.empty()) {
             temp = s.top();
             s.pop();
-            if(temp->m_isFirst == true)     //表示是第一次出现在栈顶
-             {
+            if(temp->m_isFirst == true) {     //表示是第一次出现在栈顶
                 temp->m_isFirst = false;
                 s.push(temp);
                 p = temp->m_pRight;
-            }
-            else                        //第二次出现在栈顶
-             {
+            } else {                        //第二次出现在栈顶
                 cout<<temp->m_nValue<<"\t";
                 p = NULL;
             }
@@ -89,21 +81,17 @@ void InorderRecursion(struct BinaryTreeNode* node)
 void Inorder(struct BinaryTreeNode* root)
 {
 	std::stack<BinaryTreeNode*> _stack;
-	BinaryTreeNode* p = root;
-	while (p != NULL || !_stack.empty())
-	{
-		while (p != NULL)
-		{
-			_stack.push(p);
-			p = p->m_pLeft;
-		}
-		if(!_stack.empty())
-		{
-			p = _stack.top();
-			std::cout<<p->m_nValue<<"\t";
-			_stack.pop();
-			p = p->m_pRight;
-		}
+	while (root || !_stack.empty()) {
+        while (root) {
+            _stack.push(root);
+            root = root->m_pLeft;
+        }
+        if (!_stack.empty()) {
+            root = _stack.top();
+            _stack.pop();
+            printf("%d\t", root->m_nValue);
+            root = root->m_pRight;
+        }
 	}
 }
 
@@ -121,21 +109,24 @@ void Test2()
     BinaryTreeNode* pNode4 = CreateBinaryTreeNode(4);
     BinaryTreeNode* pNode7 = CreateBinaryTreeNode(7);
 
-    ConnectTreeNodes(pNode10, pNode5, pNode12);
+    ConnectTreeNodes(pNode10, pNode5, NULL);
     ConnectTreeNodes(pNode5, pNode4, pNode7);
     
+    printf("Prorder\nRecursion:");
     PreorderRecursion(pNode10);
-    printf("\n");
+    printf("\nLoop:");
     Preorder(pNode10);
     printf("\n");
 
+    printf("Inorder\nRecursion:");
     InorderRecursion(pNode10);
-    printf("\n");
+    printf("\nLoop:");
     Inorder(pNode10);
     printf("\n");
     
+    printf("Postorder\nRecursion:");
     PostorderRecursion(pNode10);
-    printf("\n");
+    printf("\nLoop:");
     Postorder(pNode10);
     printf("\n");
     
