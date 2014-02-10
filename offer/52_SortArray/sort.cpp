@@ -6,6 +6,53 @@
 #include <cstdio>
 #include <algorithm>
 
+// Heap Sort Implement
+void HeapAdjust(int *a,int i,int size)  //\u8c03\u6574\u5806
+{
+    int lchild=2*i;       //i\u7684\u5de6\u5b69\u5b50\u8282\u70b9\u5e8f\u53f7
+    int rchild=2*i+1;     //i\u7684\u53f3\u5b69\u5b50\u8282\u70b9\u5e8f\u53f7
+    int max=i;            //\u4e34\u65f6\u53d8\u91cf
+    if(i<=size/2)          //\u5982\u679ci\u662f\u53f6\u8282\u70b9\u5c31\u4e0d\u7528\u8fdb\u884c\u8c03\u6574
+    {
+        if(lchild<=size&&a[lchild]>a[max])
+        {
+            max=lchild;
+        }   
+        if(rchild<=size&&a[rchild]>a[max])
+        {
+            max=rchild;
+        }
+        if(max!=i)
+        {
+            std::swap(a[i],a[max]);
+            HeapAdjust(a,max,size);    //\u907f\u514d\u8c03\u6574\u4e4b\u540e\u4ee5max\u4e3a\u7236\u8282\u70b9\u7684\u5b50\u6811\u4e0d\u662f\u5806
+        }
+    }       
+}
+
+void BuildHeap(int *a,int size)    //\u5efa\u7acb\u5806
+{
+    int i;
+    for(i=size/2;i>=1;i--)    //\u975e\u53f6\u8282\u70b9\u6700\u5927\u5e8f\u53f7\u503c\u4e3asize/2
+    {
+        HeapAdjust(a,i,size);   
+    }   
+}
+
+void HeapSort(int *a,int size)    //\u5806\u6392\u5e8f
+{
+    int i;
+    BuildHeap(a,size);
+    for(i=size;i>=1;i--)
+    {
+        //cout<<a[1]<<" ";
+        std::swap(a[1],a[i]);           //\u4ea4\u6362\u5806\u9876\u548c\u6700\u540e\u4e00\u4e2a\u5143\u7d20\uff0c\u5373\u6bcf\u6b21\u5c06\u5269\u4f59\u5143\u7d20\u4e2d\u7684\u6700\u5927\u8005\u653e\u5230\u6700\u540e\u9762
+          //BuildHeap(a,i-1);        //\u5c06\u4f59\u4e0b\u5143\u7d20\u91cd\u65b0\u5efa\u7acb\u4e3a\u5927\u9876\u5806
+          HeapAdjust(a,1,i-1);      //\u91cd\u65b0\u8c03\u6574\u5806\u9876\u8282\u70b9\u6210\u4e3a\u5927\u9876\u5806
+    }
+}
+
+// Quick Sort Implement
 template <class T>
 void MySwap(T& a, T& b)
 {
@@ -129,11 +176,15 @@ int main(int argc, char* argv[])
 	BubbleSort(array2, 9);
 	int array3[] = {2,4,7,9,1,0,23,12,5};
 	Insertsort(array3, 9);
+	int array4[] = {6,2,4,7,9,1,0,23,12,5};
+	HeapSort(array4, 9);
 
 	printArray(array, 9, "Quick Sort:");
 	printArray(array1, 9, "Merge Sort:");
 	printArray(array2, 9, "Bubble Sort");
 	printArray(array3, 9, "Insert Sort:");
+	printArray(array4+1, 9, "Heap Sort:");
+
 	return 0;
 }
 
