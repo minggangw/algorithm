@@ -71,7 +71,7 @@ EXE    = CommonParentInTree
 
 CC     = g++
 LL     = g++
-CFLAGS = -O2 -Wall
+CFLAGS = -O2 -Wall -g
 LFLAGS =
 
 # ****************************************************************************

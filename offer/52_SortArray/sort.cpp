@@ -7,12 +7,12 @@
 #include <algorithm>
 
 // Heap Sort Implement
-void HeapAdjust(int *a,int i,int size)  //\u8c03\u6574\u5806
+void HeapAdjust(int *a,int i,int size)
 {
-    int lchild=2*i;       //i\u7684\u5de6\u5b69\u5b50\u8282\u70b9\u5e8f\u53f7
-    int rchild=2*i+1;     //i\u7684\u53f3\u5b69\u5b50\u8282\u70b9\u5e8f\u53f7
-    int max=i;            //\u4e34\u65f6\u53d8\u91cf
-    if(i<=size/2)          //\u5982\u679ci\u662f\u53f6\u8282\u70b9\u5c31\u4e0d\u7528\u8fdb\u884c\u8c03\u6574
+    int lchild=2*i;      
+    int rchild=2*i+1;     
+    int max=i;            
+    if(i<=size/2)          
     {
         if(lchild<=size&&a[lchild]>a[max])
         {
@@ -25,30 +25,28 @@ void HeapAdjust(int *a,int i,int size)  //\u8c03\u6574\u5806
         if(max!=i)
         {
             std::swap(a[i],a[max]);
-            HeapAdjust(a,max,size);    //\u907f\u514d\u8c03\u6574\u4e4b\u540e\u4ee5max\u4e3a\u7236\u8282\u70b9\u7684\u5b50\u6811\u4e0d\u662f\u5806
+            HeapAdjust(a,max,size);    
         }
     }       
 }
 
-void BuildHeap(int *a,int size)    //\u5efa\u7acb\u5806
+void BuildHeap(int *a,int size)    
 {
     int i;
-    for(i=size/2;i>=1;i--)    //\u975e\u53f6\u8282\u70b9\u6700\u5927\u5e8f\u53f7\u503c\u4e3asize/2
+    for(i=size/2;i>=1;i--)    
     {
         HeapAdjust(a,i,size);   
     }   
 }
 
-void HeapSort(int *a,int size)    //\u5806\u6392\u5e8f
+void HeapSort(int *a,int size)    
 {
     int i;
     BuildHeap(a,size);
     for(i=size;i>=1;i--)
     {
-        //cout<<a[1]<<" ";
-        std::swap(a[1],a[i]);           //\u4ea4\u6362\u5806\u9876\u548c\u6700\u540e\u4e00\u4e2a\u5143\u7d20\uff0c\u5373\u6bcf\u6b21\u5c06\u5269\u4f59\u5143\u7d20\u4e2d\u7684\u6700\u5927\u8005\u653e\u5230\u6700\u540e\u9762
-          //BuildHeap(a,i-1);        //\u5c06\u4f59\u4e0b\u5143\u7d20\u91cd\u65b0\u5efa\u7acb\u4e3a\u5927\u9876\u5806
-          HeapAdjust(a,1,i-1);      //\u91cd\u65b0\u8c03\u6574\u5806\u9876\u8282\u70b9\u6210\u4e3a\u5927\u9876\u5806
+        std::swap(a[1],a[i]);           
+        HeapAdjust(a,1,i-1);      
     }
 }
 
@@ -85,13 +83,11 @@ void quick_sort(int s[], int l, int r)
     if (l < r)
     {
         int i = partition(s, l, r);
-        quick_sort(s, l, i - 1); // 递归调用
+        quick_sort(s, l, i - 1); 
         quick_sort(s, i + 1, r);
     }
 }
 
-/////////////////归并排序////////////////////////////////////////////
-//将有二个有序数列a[first...mid]和a[mid...last]合并。
 void mergearray(int a[], int first, const int mid, const int last)
 {
     int i = first, j = mid + 1;
@@ -124,14 +120,12 @@ void mergesort(int a[], int first, int last)
     if (first < last)
     {
         int mid = (first + last) / 2;
-        mergesort(a, first, mid);    //左边有序
-        mergesort(a, mid + 1, last); //右边有序
-        mergearray(a, first, mid, last); //再将二个有序数列合并
+        mergesort(a, first, mid);    
+        mergesort(a, mid + 1, last); 
+        mergearray(a, first, mid, last); 
     }
 }
 
-//////////////////////////////////////////////////////////////////
-/////////////////////直接插入法////////////////////////////////////
 void Insertsort(int a[], int n)
 {
     int i, j;
@@ -143,12 +137,10 @@ void Insertsort(int a[], int n)
         }
 }
 
-//////////////////////////////////////////////////////////////
-//////////////////////////////冒泡排序/////////////////////////
 void BubbleSort(int a[], int n)
 {
     int i, j;
-    for (i = 0; i < n; i++)                         //n
+    for (i = 0; i < n; i++)       
         for (j = 1; j < n - i; j++)
              if (a[j - 1] > a[j]) {
                  int temp = a[j - 1];

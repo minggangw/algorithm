@@ -13,7 +13,8 @@ int ipstrtoint(const char *ip)
     while(*pEnd != '\0')
     {
         while(*pEnd != '.' && *pEnd != '\0')
-        pEnd++;
+            pEnd++;
+        
         tmp = 0;
 
         while(pStart < pEnd) {
@@ -23,8 +24,10 @@ int ipstrtoint(const char *ip)
             
         result += (tmp << shift);
         shift -= 8;
+        
         if (*pEnd == '\0')
-        break;
+            break;
+
         pStart = pEnd + 1;
         pEnd++;
     }
