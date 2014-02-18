@@ -19,18 +19,17 @@ void PreorderRecursion(struct BinaryTreeNode* node)
 void Preorder(struct BinaryTreeNode* root)
 {
 	std::stack<BinaryTreeNode*> _stack;
-	while (root || !_stack.empty()) {
-        while (root) {
+    while (!_stack.empty() || root) {
+        if (root) {
             printf("%d\t", root->m_nValue);
             _stack.push(root);
             root = root->m_pLeft;
-        }
-        if (!_stack.empty()) {
+        } else {
             root = _stack.top();
             _stack.pop();
             root = root->m_pRight;
         }
-	}
+    }
 }
 
 void PostorderRecursion(struct BinaryTreeNode* node)
@@ -46,24 +45,22 @@ void Postorder(BinaryTreeNode *root)    //非递归后序遍历
 {
     stack<BinaryTreeNode*> s;
     BinaryTreeNode *p = root;
-    BinaryTreeNode *temp;
+    BinaryTreeNode* pre = NULL;
 
-    while (p ||!s.empty()) {
-        while (p) {             //沿左子树一直往下搜索，直至出现没有左子树的结点
-            p->m_isFirst = true;
+    while (p || !s.empty()) {
+        if (p) {             //沿左子树一直往下搜索，直至出现没有左子树的结点
             s.push(p);
             p = p->m_pLeft;
-        }
-        if (!s.empty()) {
-            temp = s.top();
+        } else {
+            p = s.top();
             s.pop();
-            if(temp->m_isFirst == true) {     //表示是第一次出现在栈顶
-                temp->m_isFirst = false;
-                s.push(temp);
-                p = temp->m_pRight;
-            } else {                        //第二次出现在栈顶
-                cout<<temp->m_nValue<<"\t";
+            if(p->m_pRight == NULL || p->m_pRight == pre) {     //表示是第一次出现在栈顶
+                cout << p->m_nValue << "\t";
+                pre = p;
                 p = NULL;
+            } else {                        //第二次出现在栈顶
+                s.push(p);
+                p = p->m_pRight;
             }
         }
     }
@@ -82,11 +79,10 @@ void Inorder(struct BinaryTreeNode* root)
 {
 	std::stack<BinaryTreeNode*> _stack;
 	while (root || !_stack.empty()) {
-        while (root) {
+        if (root) {
             _stack.push(root);
             root = root->m_pLeft;
-        }
-        if (!_stack.empty()) {
+        } else {
             root = _stack.top();
             _stack.pop();
             printf("%d\t", root->m_nValue);
