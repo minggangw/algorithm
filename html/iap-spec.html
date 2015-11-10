@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>
-      Presentation API
+      In-app purchase API
     </title>
     <script src='../js/require.js' data-main='../js/profile-w3c-common' async class='remove'></script>
     <script class="remove">
@@ -134,9 +134,7 @@
   <body>
     <section id="abstract">
       <p>
-        This specification defines an API to enable web content to access
-        external presentation-type displays and use them for presenting web
-        content.
+        This specification defines an API to enable in-app purchase on web.
       </p>
     </section>
     <section id="sotd">
@@ -147,68 +145,13 @@
         considerations</a> need to be adjusted based on feedback and
         experience. Some open issues are noted inline; please check the group's
         <a href="https://github.com/w3c/presentation-api/issues">issue
-        tracker</a> on GitHub for all open issues. Feedback from early
-        experimentations is encouraged to allow the Second Screen Presentation
-        Working Group to evolve the specification based on implementation
-        issues.
+        tracker</a> on GitHub for all open issues.
       </p>
     </section>
     <section class="informative">
       <h2>
         Introduction
       </h2>
-      <p>
-        This specification aims to make <a>presentation displays</a> such as
-        projectors or connected TVs, available to the Web and takes into
-        account displays that are attached using wired (HDMI, DVI, or similar)
-        and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, or
-        similar).
-      </p>
-      <p>
-        Devices with limited screen size lack the ability to show content to a
-        larger audience, for example, a group of colleagues in a conference
-        room, or friends and family at home. Showing content on an external
-        large <a>presentation display</a> helps to improve the perceived
-        quality and impact of the presented content.
-      </p>
-      <p>
-        At its core, this specification enables an exchange of messages between
-        a page that acts as the <a>controller</a> and another page that
-        represents the <a data-lt="presenting browsing context">presentation</a>
-        shown in the <a>presentation display</a>. How the messages are
-        transmitted is left to the UA in order to allow the use of
-        <a>presentation display</a> devices that can be attached in a wide
-        variety of ways. For example, when a <a>presentation display</a> device
-        is attached using HDMI or Miracast, the same UA that acts as the
-        <a>controller</a> renders the <a data-lt=
-        "presenting browsing context">presentation</a>. Instead of displaying
-        the <a data-lt="presenting browsing context">presentation</a> in another
-        window on the same device, however, it can use whatever means the
-        operating system provides for using the external <a>presentation
-        displays</a>. In such a case, both the <a>controller</a> and <a data-lt=
-        "presenting browsing context">presentation</a> run on the same UA and
-        the operating system is used to route the <a>presentation display</a>
-        output to the <a>presentation display</a>. This is commonly referred to
-        as the <b id="1-ua">1-UA</b> case. This specification imposes no
-        requirements on the <a>presentation display</a> devices connected in
-        such a manner.
-      </p>
-      <p>
-        If the <a>presentation display</a> is able to render HTML documents and
-        communicate with the <a>controller</a>, the <a>controller</a> does not
-        need to render the <a data-lt=
-        "presenting browsing context">presentation</a>. In this case, the UA
-        acts as a proxy that requests the <a>presentation display</a> to show
-        and render the <a data-lt="presenting browsing context">presentation</a>
-        itself. This is commonly referred to as the <b id="2-ua">2-UA</b> case.
-        This way of attaching to displays could be enhanced in the future by
-        defining a standard protocol for delivering these types of messages
-        that display devices could choose to implement.
-      </p>
-      <p>
-        The API defined here is intended to be used with UAs that attach to
-        <a>presentation display</a> devices through any of the above means.
-      </p>
     </section>
     <section id="use-cases-and-requirements">
       <h2>
@@ -288,53 +231,7 @@
         <h3>
           Common idioms
         </h3>
-        <p>
-          A <dfn lt="presentation display|presentation displays">presentation
-          display</dfn> refers to an external screen available to the user
-          agent via an implementation specific connection technology.
-        </p>
-        <p>
-          A <dfn lt="presentation session|presentation sessions">presentation
-          session</dfn> is an object relating a <a>controlling browsing
-          context</a> to its <a>presenting browsing context</a> and enables
-          two-way-messaging between them. Each <a>presentation session</a> has
-          a <dfn>presentation session state</dfn>, a <dfn lt=
-          "presentation session identifier|presentation session identifiers">presentation
-          session identifier</dfn> to distinguish it from other <a>presentation
-          sessions</a>, and a <dfn>presentation session URL</dfn> that is a
-          <a>URL</a> used to create or resume the <a>presentation session</a>.
-          A <dfn>valid presentation session identifier</dfn> consists of
-          alphanumeric ASCII characters only, is at least 16 characters long,
-          and is unique within the <a>set of presentations</a>.
-        </p>
-        <p>
-          A <dfn lt=
-          "controlling browsing context|controlling browsing contexts">controlling
-          browsing context</dfn> (or <dfn>controller</dfn> for short) is a
-          <a>browsing context</a> that has connected to a <a>presentation
-          session</a> by calling <code><a for=
-          "PresentationRequest">start</a>()</code> or <code><a for=
-          "PresentationRequest">reconnect</a>()</code>, or received a
-          <a>presentation session</a> via a <code>sessionconnect</code> event.
-        </p>
-        <p>
-          The <dfn>presenting browsing context</dfn> (or <dfn data-lt=
-          "presentation context">presentation</dfn> for short) is the browsing
-          context responsible for rendering to a <a>presentation display</a>. A
-          <a>presenting browsing context</a> can reside in the same user agent
-          as the <a>controlling browsing context</a> or a different one.
-        </p>
-        <p>
-          The <dfn>set of presentations</dfn>, initially empty, contains the
-          <a>presentation session</a>s created by the <a>controlling browsing
-          contexts</a> for the user agent (or a specific user profile within
-          the user agent). The <a>set of presentations</a> is represented by a
-          list of tuples, where each tuple consists of a <a>presentation
-          session URL</a>, a <a>presentation session identifier</a>, and the
-          <a>presentation session</a> itself. The <a>presentation session
-          URL</a> and <a>presentation session identifier</a> uniquely identify
-          the <a>presentation session</a>.
-        </p>
+
       </section>
      
       <section>
@@ -362,37 +259,7 @@
             Promise&lt;PurchaseResult&gt; buy(PurchaseInfo purchase);
             Promise&lt;sequence&lt;Product&gt;&gt; queryProductsInfo(sequence&lt;DOMString&gt; productIds);
           };
-
-          dictionary InitOptions {
-            DOMString channel;
-            DOMString key;
-          };
-
-          dictionary Product {
-            DOMString productId;
-            DOMString title;
-            DOMString description;
-            DOMString currencyCode;
-            double price;
-          };
-
-          dictionary PurchaseResult {
-            DOMString productId;
-            DOMString transactionId;
-            DOMString productReceipt;
-            DOMString packageName;
-            DOMString purchaseTime;
-            DOMString purchaseState;
-          };
-
-          dictionary PurchaseInfo {
-            DOMString productId;
-            DOMString userInfo;
-            double price;
-            unsigned long count;
-            dictionary extraInfo;
-          };
-</pre>
+				</pre>
       <section>
         <h2>
           Methods
@@ -595,24 +462,15 @@
           </ol>
         </section>
         </section>
-        <section>
-        <p>Dictonary</p>
-          <pre class="idl">
-            dictionary InitOptions {
-              DOMString channel;
-              DOMString key;
-            };
-          </pre>
-        </section>
+
         <section>
         <h2>InitOptions</h2>
 
         <dl class="idl" title="dictionary InitOptions">
           <dt>DOMString channel</dt>
-          <dd>The name of the selected channel.</dd>
-
+          <dd>The name of the channel which you want to select.</dd>
           <dt>DOMString key</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The public licensing key of this application if it exists.</dd>
         </dl>
       </section>
 
@@ -621,36 +479,34 @@
 
         <dl class="idl" title="dictionary Product">
           <dt>DOMString productId</dt>
-          <dd>The name of the selected channel.</dd>
-
+          <dd>The ID of the product.</dd>
           <dt>DOMString title</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The title of the product.</dd>
           <dt>DOMString description</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>A simple description of the product.</dd>
           <dt>DOMString currencyCode</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The currency code of this product used.</dd>
           <dt>double price</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The price of the product.</dd>
         </dl>
       </section>
 
       <section>
         <h2>dictionary PurchaseResult</h2>
 
-        <dl class="idl" title="dictionary Product">
+        <dl class="idl" title="dictionary PurchaseResult">
           <dt>DOMString productId</dt>
-          <dd>The name of the selected channel.</dd>
-
+          <dd>The ID of the purchased product.</dd>
           <dt>DOMString transactionId</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The transaction ID of this purchase used.</dd>
           <dt>DOMString productReceipt</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The receipt of the purchased product.</dd>
           <dt>DOMString packageName</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The package name of the application.</dd>
           <dt>DOMString purchaseTime</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The time when the purchase happened</dd>
           <dt>DOMString purchaseState</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The state of the purchase.</dd>
         </dl>
       </section>
 
@@ -659,8 +515,7 @@
 
         <dl class="idl" title="dictionary Product">
           <dt>DOMString productId</dt>
-          <dd>The name of the selected channel.</dd>
-
+          <dd>The ID of the purchased product.</dd>
           <dt>DOMString userInfo</dt>
           <dd>MUST be either "audio" or "video".</dd>
           <dt>dictionary extraInfo</dt>
@@ -681,96 +536,6 @@
       <h3>
         Personally identifiable information
       </h3>
-      <p>
-        The <code>change</code> event fired on the
-        <a>PresentationAvailability</a> object reveals one bit of information
-        about the presence (or non-presence) of a <a>presentation display</a>
-        typically discovered through the local area network. This could be used
-        in conjunction with other information for fingerprinting the user.
-        However, this information is also dependent on the user's local network
-        context, so the risk is minimized.
-      </p>
-      <h3>
-        Cross-origin access
-      </h3>
-      <p>
-        A <a>presentation session</a> is allowed to be accessed across origins;
-        the presentation URL and presentation ID used to create the
-        presentation are the only information needed to reconnect to a session
-        from any origin in that user agent. In other words, a presentation is
-        not tied to a particular opening origin.
-      </p>
-      <p>
-        This design allows controlling contexts from different domains to
-        connect to a shared presentation resource. The security of the
-        presentation ID prevents arbitrary pages from connecting to an existing
-        presentation.
-      </p>
-      <p>
-        This specification does not prohibit a user agent from publishing
-        information about its <a>set of presentations</a>. The group envisions
-        a user agent on another device (distinct from the controller or
-        presentation) becoming authorized to reconnect to the presentation,
-        either by user action or by discovering the presentation's URL and id.
-      </p>
-      <div class="issue">
-        This section should provide informative guidance as to what constitutes
-        a reasonable context for a Web page to become authorized to control a
-        presentation session.
-      </div>
-      <h3>
-        Device Access
-      </h3>
-      <p>
-        The presentation API abstracts away what "local" means for displays,
-        meaning that it exposes network-accessible displays as though they were
-        local displays. The Presentation API requires user permission for a
-        page to access any display to mitigate issues that could arise, such as
-        showing unwanted content on a display viewable by others.
-      </p>
-      <h3>
-        Temporary identifiers and browser state
-      </h3>
-      <p>
-        The presentation URL and presentation ID can be used to connect to a
-        presentation session from another browsing context. They can be
-        intercepted if an attacker can inject content into the controlling
-        page.
-      </p>
-      <div class="issue">
-        Should we restrict the API to some extent in non secure contexts?
-      </div>
-      <h3>
-        Incognito mode and clearing of browsing data
-      </h3>
-      <p>
-        The content displayed on the presentation is different from the
-        controller. In particular, if the user is logged in in both contexts,
-        then logs out of the controlling browsing context, she will not be
-        automatically logged out from the presenting browsing context.
-        Applications that use authentication should pay extra care when
-        communicating between devices.
-      </p>
-      <p>
-        The set of presentations known to the user agent should be cleared when
-        the user requests to "clear browsing data."
-      </p>
-      <div class="issue" data-number="14"></div>
-      <div class="issue">
-        The spec should clarify what is to happen to the set of known
-        presentations in "incognito" (private browsing context) mode.
-      </div>
-      <h3>
-        Messaging between presentation sessions
-      </h3>
-      <p>
-        This spec will not mandate communication protocols between the
-        <a>controlling browsing context</a> and the <a>presenting browsing
-        context</a>, but it should set some guarantees of message
-        confidentiality and authenticity between corresponding <a>presentation
-        sessions</a>.
-      </p>
-      <div class="issue" data-number="80"></div>
     </section>
     <section>
       <h2>
