@@ -3,66 +3,24 @@
   <head>
     <meta charset="UTF-8">
     <title>
-      In-app purchase API
+      In-App Purchase API
     </title>
     <script src='../js/require.js' data-main='../js/profile-w3c-common' async class='remove'></script>
     <script class="remove">
     var respecConfig = {
         specStatus: 'ED',
-        edDraftURI: 'http://w3c.github.io/presentation-api/',
-        shortName:  'presentation-api',
+        edDraftURI: 'http://10.238.157.53/html/iap.html',
+        shortName:  'IAP-api',
         editors: [
           {
-            w3cid: 68454,
-            name: 'Mark Foltz',
-            company: 'Google',
-            mailto: 'mfoltz@google.com'
-          },
-          {
             w3cid: 63802,
-            name: 'Dominik Röttsches',
+            name: 'Minggang Wang',
             company: 'Intel',
-            note: 'until April 2015'
+            note: 'until Nov 2015'
           }
         ],
         previousMaturity: 'WD',
         previousPublishDate: '2015-07-01',
-        otherLinks: [
-          {
-            key: 'Version history',
-            data: [
-              {
-                value: 'GitHub w3c/presentation-api/commits',
-                href: 'https://github.com/w3c/presentation-api/commits/'
-              }
-            ]
-          },
-          {
-            key: 'Participate',
-            data: [
-              {
-                value: 'GitHub w3c/presentation-api',
-                href: 'https://github.com/w3c/presentation-api/'
-              },
-              {
-                value: 'File an issue',
-                href: 'https://github.com/w3c/presentation-api/issues/new'
-              },
-              {
-                value: 'Open issues',
-                href: 'https://github.com/w3c/presentation-api/issues/'
-              },
-              {
-                value: 'Mailing-list (public-secondscreen@w3.org)',
-                href: 'https://lists.w3.org/Archives/Public/public-secondscreen/'
-              }
-            ]
-          }
-        ],
-        wg: 'Second Screen Presentation Working Group',
-        wgURI: 'http://www.w3.org/2014/secondscreen/',
-        wgPublicList: 'public-secondscreen',
-        wgPatentURI: 'http://www.w3.org/2004/01/pp-impl/74168/status',
         localBiblio: {
           PROMGUIDE: {
             title: 'Writing Promise-Using Specifications',
@@ -74,9 +32,6 @@
             publisher: 'W3C'
           }
         },
-        issueBase: "https://www.github.com/w3c/presentation-api/issues/",
-        githubAPI: "https://api.github.com/repos/w3c/presentation-api",
-
       };
     </script>
     <style>
@@ -153,41 +108,11 @@
         Introduction
       </h2>
     </section>
-    <section id="use-cases-and-requirements">
-      <h2>
-        Use cases and requirements
-      </h2>
-      <p>
-        Use cases and requirements are captured in a separate <a href=
-        "https://github.com/w3c/presentation-api/blob/gh-pages/uc-req.md">Presentation
-        API Use Cases and Requirements</a> document.
-      </p>
-    </section>
   
     <section>
       <h2>
         Terminology
       </h2>
-      <p>
-        The terms <dfn><a href=
-        "http://www.w3.org/TR/html5/browsers.html#browsing-context">browsing
-        context</a></dfn>, <dfn><a href=
-        "http://www.w3.org/TR/html5/webappapis.html#event-handlers">event
-        handler</a></dfn>, <dfn><a href=
-        "http://www.w3.org/TR/html5/webappapis.html#event-handler-event-type">event
-        handler event type</a></dfn>, <dfn data-lt="fire"><a href=
-        "http://www.w3.org/TR/html5/infrastructure.html#concept-event-fire">firing
-        an event</a></dfn>, <dfn><a href=
-        "http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">firing
-        a simple event</a></dfn> <dfn><a href=
-        "http://www.w3.org/TR/html5/browsers.html#navigate">navigate</a></dfn>,
-        <dfn><a href="http://www.w3.org/TR/html5/webappapis.html">queue a
-        task</a></dfn>, <dfn><a href=
-        "http://www.w3.org/TR/html5/infrastructure.html#concept-events-trusted">
-        trusted event</a></dfn>, <dfn><a href=
-        "http://www.w3.org/TR/html5/browsers.html#allowed-to-show-a-popup">allowed
-        to show a popup</a></dfn> are defined in [[!HTML5]].
-      </p>
       <p>
         This document provides interface definitions using the Web IDL standard
         ([[!WEBIDL]]). The terms <dfn><a href=
@@ -206,20 +131,6 @@
         a Promise</a></dfn>, and <dfn data-lt="reject"><a href=
         "http://www.w3.org/2001/tag/doc/promises-guide#reject-promise">rejecting
         a Promise</a></dfn> are used as explained in [[!PROMGUIDE]].
-      </p>
-      <p>
-        The term <dfn><a href="https://url.spec.whatwg.org/#url">URL</a></dfn>
-        is defined in the WHATWG URL standard [[!URL]].
-      </p>
-      <p>
-        The term <dfn><a href=
-        "http://dev.w3.org/2006/webapi/FileAPI/#blob">Blob</a></dfn> is defined
-        in the File API specification [[!FILEAPI]].
-      </p>
-      <p>
-        The term <dfn><a href=
-        "http://w3c.github.io/webrtc-pc/#idl-def-RTCDataChannel">RTCDataChannel</a></dfn>
-        is defined in the WebRTC API specification ([[WEBRTC]]).
       </p>
     </section>
     
@@ -255,23 +166,20 @@
 
             // Operations.
             Promise&lt;DOMString&gt; getReceipt();
+            Promise&lt;void&gt; validateReceipt(DOMString receipt);
             Promise&lt;PurchaseResult&gt; restore();
             Promise&lt;PurchaseResult&gt; buy(PurchaseInfo purchase);
             Promise&lt;sequence&lt;Product&gt;&gt; queryProductsInfo(sequence&lt;DOMString&gt; productIds);
           };
 				</pre>
-      <section>
-        <h2>
-          Methods
-        </h2>
+
         <section>
           <h4>
-            Initialize the purchase.
+            Initializing the <code>iap</code>
           </h4>
           <p>
-            When <code><dfn for="IAP">init</dfn>(options)</code> method is called, iap will
-            be initiated by the given parameter <code>options</code>, which indicates
-            the channel of the purchasing and the used key.
+            When <code><dfn for="IAP">init</dfn>(options)</code> method is called, <code>iap</code> will
+            be initiated by the given parameter <code>options</code>, which binds to the <a>channel</a>.
           </p>
           <ol>
             <li>If the object has already been initialized, return a promise rejected with
@@ -282,7 +190,7 @@
               whose name is TypeError.
             </li>
             <li>
-              Let <em>P</em> be a new promise.
+              Let <em>P</em> be a new <a>Promise</a>.
             </li>
             <li>
               Return <em>P</em>.
@@ -310,16 +218,16 @@
               </ol>
             </li>
             <li>
-              Resolve <em>promise</em>
+              <a>Resolve</a> <em>promise</em>
             </li>
           </ol>
         </section>
         <section>
           <h4>
-            Query the detailed information of products.
+            Querying the detailed information of products.
           </h4>
           <p>
-            When <code><dfn for="IAP">buy</dfn>(producdIds)</code> method is called,
+            When <code><dfn for="IAP">queryProductsInfo</dfn>(producdIds)</code> method is called,
             iap will get the detailed informations of the products, run the following
             steps
           </p>
@@ -332,7 +240,7 @@
                 name is "empty product".
             </li>
             <li>
-              Let <em>P</em> be a new promise.
+              Let <em>P</em> be a new <a>Promise</a>.
             </li>
             <li>
               Return <em>P</em>.
@@ -358,7 +266,7 @@
                   For each product, add its information to <em>array</em>
                 </li>
                 <li>
-                  Resolve <em>P</em> with array.
+                  <a>Resolve</a> <em>P</em> with array.
                 </li>
               </ol>
             </li>
@@ -366,7 +274,7 @@
         </section>
         <section>
           <h4>
-            Buy a product.
+            Purchasing a product.
           </h4>
           <p>
             When <code><dfn for="IAP">buy</dfn>(purchase)</code> method is called,
@@ -382,7 +290,7 @@
               with a Error whose name is "empty productId".
             </li>
             <li>
-              Let <em>P</em> be a new promise.
+              Let <em>P</em> be a new <a>Promise</a>.
             </li>
             <li>
               Return <em>P</em>.
@@ -394,7 +302,7 @@
                   Let <em>S</em> be the required product.
                 </li>
                 <li>
-                Resolve <em>P</em> with S.
+                <a>Resolve</a> <em>P</em> with S.
                 </li>
               </ol>
             </li>
@@ -402,7 +310,7 @@
         </section>
         <section>
           <h4>
-            Get receipt.
+            Getting the receipt.
           </h4>
           <p>
             When <code><dfn for="IAP">getReceipt</dfn>()</code> method is called,
@@ -414,7 +322,7 @@
               a Error whose name is "not initialized".
             </li>
             <li>
-              Let <em>P</em> be a new promise.
+              Let <em>P</em> be a new <a>Promise</a>.
             </li>
             <li>
               Return <em>P</em>.
@@ -423,7 +331,7 @@
             If getting the receipt successfully, then run the following steps:
               <ol>
                 <li>
-                  Resolve <em>P</em> with the receipt.
+                  <a>Resolve</a> <em>P</em> with the receipt.
                 </li>
               </ol>
             </li>
@@ -431,10 +339,39 @@
         </section>
         <section>
           <h4>
-            Restore the previsou purchases.
+            Validating the receipt.
           </h4>
           <p>
-            When <code><dfn for="IAP">resotre</dfn>()</code> method is called,
+            When <code><dfn for="IAP">validateReceipt</dfn>()</code> method is called,
+            iap will validate the receipt.
+          </p>
+          <ol>
+            <li>
+              If the object has not been initialized, return a promise rejected with
+              a Error whose name is "not initialized".
+            </li>
+            <li>
+              Let <em>P</em> be a new <a>Promise</a>.
+            </li>
+            <li>
+              Return <em>P</em>.
+            </li>
+            <li>
+            If getting the receipt successfully, then run the following steps:
+              <ol>
+                <li>
+                  <a>Resolve</a> <em>P</em> with the receipt.
+                </li>
+              </ol>
+            </li>
+          </ol>
+        </section>
+        <section>
+          <h4>
+            Restoring the purchased products.
+          </h4>
+          <p>
+            When <code><dfn for="IAP">restore</dfn>()</code> method is called,
             iap will restore the previous purchases.
           </p>
           <ol>
@@ -443,7 +380,7 @@
               a Error whose name is "not initialized".
             </li>
             <li>
-              Let <em>P</em> be a new promise.
+              Let <em>P</em> be a new <a>Promise</a>.
             </li>
             <li>
               Return <em>P</em>.
@@ -455,16 +392,15 @@
                   Let <em>S</em> be the required product.
                 </li>
                 <li>
-                Resolve <em>P</em> with S.
+                <a>Resolve</a> <em>P</em> with S.
                 </li>
               </ol>
             </li>
           </ol>
         </section>
-        </section>
 
         <section>
-        <h2>InitOptions</h2>
+        <h2>Dictionaries</h2>
 
         <dl class="idl" title="dictionary InitOptions">
           <dt>DOMString channel</dt>
@@ -472,10 +408,6 @@
           <dt>DOMString key</dt>
           <dd>The public licensing key of this application if it exists.</dd>
         </dl>
-      </section>
-
-      <section>
-        <h2>dictionary Product</h2>
 
         <dl class="idl" title="dictionary Product">
           <dt>DOMString productId</dt>
@@ -489,10 +421,6 @@
           <dt>double price</dt>
           <dd>The price of the product.</dd>
         </dl>
-      </section>
-
-      <section>
-        <h2>dictionary PurchaseResult</h2>
 
         <dl class="idl" title="dictionary PurchaseResult">
           <dt>DOMString productId</dt>
@@ -508,26 +436,21 @@
           <dt>DOMString purchaseState</dt>
           <dd>The state of the purchase.</dd>
         </dl>
-      </section>
 
-      <section>
-        <h2>dictionary PurchaseInfo</h2>
-
-        <dl class="idl" title="dictionary Product">
+        <dl class="idl" title="dictionary PurchaseInfo">
           <dt>DOMString productId</dt>
           <dd>The ID of the purchased product.</dd>
           <dt>DOMString userInfo</dt>
-          <dd>MUST be either "audio" or "video".</dd>
-          <dt>dictionary extraInfo</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The information of the user.</dd>
           <dt>unsigned long count</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The quantity of the product.</dd>
           <dt>double price</dt>
-          <dd>MUST be either "audio" or "video".</dd>
+          <dd>The price of the product.</dd>
+          <dt>dictionary extraInfo</dt>
+          <dd>Additional information used to descript the purchase.</dd>
         </dl>
       </section>
-      </section>
-
+    </section>
     <section>
       <h2>
         Security and privacy considerations
