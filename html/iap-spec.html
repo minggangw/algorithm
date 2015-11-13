@@ -107,6 +107,16 @@
       <h2>
         Introduction
       </h2>
+      <p>
+      	This specification aims to make In-App Purchase(IAP) such as Google Play or Apple Store,
+      	available to the Web. Nowadays, user can purchase virtual goods within paid or free
+      	apps. The app can offer customers additional digital content, functionality, services
+      	and even subscriptions.
+      </p>
+      <p>
+      	At its core, the <a href="#idl-def-iap"><code>iap</code></a> enables all necessary
+      	operations in IAP.
+      </p>
     </section>
   
     <section>
@@ -179,15 +189,33 @@
           </h4>
           <p>
             When <code><dfn for="IAP">init</dfn>(options)</code> method is called, <code>iap</code> will
-            be initiated by the given parameter <code>options</code>, which binds to the <a>channel</a>.
+            be initiated by the given parameter <code>options</code>, which assigns the channel to select.
           </p>
+          <dl>
+            <dt>
+              Input
+            </dt>
+            <dd>
+              <code>presentationRequest</code>, the
+              <code>PresentationRequest</code> object
+            </dd>
+            <dd>
+              <code>presentationUrl</code>, the <a>presentation request URL</a>
+            </dd>
+            <dt>
+              Output
+            </dt>
+            <dd>
+              <em>P</em>, a <a>Promise</a>
+            </dd>
+          </dl>
           <ol>
-            <li>If the object has already been initialized, return a promise rejected with
-                a new DOMException whose name is InvalidStateError.
+            <li>If the <code>iap</code> has already been initialized, return a <a>Promise</a> rejected with
+                a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
             <li>
-              If the channel of options is empty, return a promise rejected with a new Error
-              whose name is TypeError.
+              If the <a href="#widl-InitOptions-channel">channel</a> is empty, return a <a>Promise</a> rejected with a DOMExpection
+              named <code>"InvalidAccessError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -206,19 +234,19 @@
             </li>
             <li>If the specified channel is not suppportd, then:
               <ol>
-                <li>Reject P whith a Error named "Not supported".
+                <li><a>Reject</a> <em>P</em> whith a DOMExpection named <code>"NotSupportedError"</code>.
                 </li>
               </ol>
             </li>
             <li>If the error occurs during initialization, then:
               <ol>
                 <li>
-                  Reject P with the failed reason.
+                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
                 </li>
               </ol>
             </li>
             <li>
-              <a>Resolve</a> <em>promise</em>
+              <a>Resolve</a> <em>P</em>
             </li>
           </ol>
         </section>
@@ -228,16 +256,16 @@
           </h4>
           <p>
             When <code><dfn for="IAP">queryProductsInfo</dfn>(producdIds)</code> method is called,
-            iap will get the detailed informations of the products, run the following
-            steps
+            <code>iap</code> will get the detailed informations of the products, run the following
+            steps:
           </p>
           <ol>
             <li>
-              If the object has not been initialized, return a promise rejected with
-              a Error whose name is "not initialized".
+              If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
+                a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
-            <li>If the productIds is empty, return a promise rejected with a Error whose
-                name is "empty product".
+            <li>If the productIds is empty, return a <a>Promise</a> rejected with a DOMExpection whose
+                name is <code>"IndexSizeError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -249,10 +277,10 @@
               Query the information.
             </li>
             <li>
-              If a error occurs then:
+              If an error occurs then:
               <ol>
                 <li>
-                  Reject P with the failed reasons.
+                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
                 </li>
               </ol>
             </li>
@@ -263,14 +291,23 @@
                   Let <em>array</em> be an empty array.
                 </li>
                 <li>
-                  For each product, add its information to <em>array</em>
+                  For each product, add <a href="#idl-def-Product">product</a> to <em>array</em>
                 </li>
                 <li>
-                  <a>Resolve</a> <em>P</em> with array.
+                  <a>Resolve</a> <em>P</em> with <em>array</em>.
                 </li>
               </ol>
             </li>
           </ol>
+          <div class="note">
+            No specific transport for the connection between the <a>controlling
+            browsing context</a> and the <a>presenting browsing context</a> is
+            mandated, except that for multiple calls to <code><a for=
+            "PresentationSession">send</a>()</code> it has to be ensured that
+            messages are delivered to the other end reliably and in sequence.
+            The transport should function equivalently to an
+            <a><code>RTCDataChannel</code></a> in reliable mode.
+          </div>
         </section>
         <section>
           <h4>
@@ -278,16 +315,16 @@
           </h4>
           <p>
             When <code><dfn for="IAP">buy</dfn>(purchase)</code> method is called,
-            iap will buy the assigned product. 
+            <code>iap</code> will buy the assigned product. 
           </p>
           <ol>
             <li>
-              If the object has not been initialized, return a promise rejected with
-              a Error whose name is "not initialized".
+              If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
+              a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
             <li>
-              If the productId of the PurchaseInfo is empty, return a promise rejected
-              with a Error whose name is "empty productId".
+              If the <a href="#widl-PurchaseResult-productId">productId</a> is undefined, return a 
+              promise return a <a>Promise</a> rejected with a DOMExpection named <code>"InvalidAccessError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -299,10 +336,10 @@
               If buying the product successfully, then run the following steps:
               <ol>
                 <li>
-                  Let <em>S</em> be the required product.
+                  Let <em>S</em> be the pruchased <a href="#idl-def-Product">product</a>.
                 </li>
                 <li>
-                <a>Resolve</a> <em>P</em> with S.
+                <a>Resolve</a> <em>P</em> with <em>S</em>.
                 </li>
               </ol>
             </li>
@@ -314,12 +351,12 @@
           </h4>
           <p>
             When <code><dfn for="IAP">getReceipt</dfn>()</code> method is called,
-            iap will return the receipt of the corresponding channel.
+            <code>iap</code> will return the receipt of the corresponding channel.
           </p>
           <ol>
             <li>
-              If the object has not been initialized, return a promise rejected with
-              a Error whose name is "not initialized".
+              If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
+              a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -328,10 +365,10 @@
               Return <em>P</em>.
             </li>
             <li>
-            If getting the receipt successfully, then run the following steps:
+            	If getting the receipt successfully, then run the following steps:
               <ol>
                 <li>
-                  <a>Resolve</a> <em>P</em> with the receipt.
+                  <a>Resolve</a> <em>P</em> with the requested receipt.
                 </li>
               </ol>
             </li>
@@ -343,12 +380,12 @@
           </h4>
           <p>
             When <code><dfn for="IAP">validateReceipt</dfn>()</code> method is called,
-            iap will validate the receipt.
+            <code>iap</code> will validate the receipt.
           </p>
           <ol>
             <li>
-              If the object has not been initialized, return a promise rejected with
-              a Error whose name is "not initialized".
+              If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
+              a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -357,7 +394,7 @@
               Return <em>P</em>.
             </li>
             <li>
-            If getting the receipt successfully, then run the following steps:
+            	If getting the receipt successfully, then run the following steps:
               <ol>
                 <li>
                   <a>Resolve</a> <em>P</em> with the receipt.
@@ -372,12 +409,12 @@
           </h4>
           <p>
             When <code><dfn for="IAP">restore</dfn>()</code> method is called,
-            iap will restore the previous purchases.
+            <code>iap</code> will restore the previous purchases.
           </p>
           <ol>
             <li>
-              If the object has not been initialized, return a promise rejected with
-              a Error whose name is "not initialized".
+              If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
+              a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -386,13 +423,21 @@
               Return <em>P</em>.
             </li>
             <li>
+            	If the task fails, run the following steps:
+            	<ol>
+            		<li>
+            			<a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+            		</li>
+            	</ol>
+            </li>
+            <li>
               If restoring successfully, then run the following steps:
               <ol>
                 <li>
-                  Let <em>S</em> be the required product.
+                  Let <em>S</em> be the restored <a href="#idl-def-Product">product</a>.
                 </li>
                 <li>
-                <a>Resolve</a> <em>P</em> with S.
+                <a>Resolve</a> <em>P</em> with  <em>S</em>.
                 </li>
               </ol>
             </li>
@@ -401,14 +446,19 @@
 
         <section>
         <h2>Dictionaries</h2>
-
+        <p>
+        	An <a>InitOptions</a> dictionary is a base type that specifies the <code>iap</code>,
+        	such as channel and key attributes.
+        </p>
         <dl class="idl" title="dictionary InitOptions">
           <dt>DOMString channel</dt>
           <dd>The name of the channel which you want to select.</dd>
           <dt>DOMString key</dt>
           <dd>The public licensing key of this application if it exists.</dd>
         </dl>
-
+        <p>
+        	A Product dictionary represents
+        </p>
         <dl class="idl" title="dictionary Product">
           <dt>DOMString productId</dt>
           <dd>The ID of the product.</dd>
@@ -421,7 +471,9 @@
           <dt>double price</dt>
           <dd>The price of the product.</dd>
         </dl>
-
+        <p>
+        	A PurchaseResult dictionary represents
+        </p>
         <dl class="idl" title="dictionary PurchaseResult">
           <dt>DOMString productId</dt>
           <dd>The ID of the purchased product.</dd>
@@ -436,7 +488,9 @@
           <dt>DOMString purchaseState</dt>
           <dd>The state of the purchase.</dd>
         </dl>
-
+        <p>
+        	A PurchaseInfo dictionary represents
+        </p>
         <dl class="idl" title="dictionary PurchaseInfo">
           <dt>DOMString productId</dt>
           <dd>The ID of the purchased product.</dd>
@@ -451,24 +505,94 @@
         </dl>
       </section>
     </section>
-    <section>
-      <h2>
-        Security and privacy considerations
-      </h2>
-      <div class="issue" data-number="45"></div>
-      <h3>
-        Personally identifiable information
-      </h3>
-    </section>
-    <section>
-      <h2>
-        Acknowledgments
-      </h2>
-      <p>
-        Thanks to Wayne Carr, Louay Bassbouss, Anssi Kostiainen, 闵洪波 (Hongbo
-        Min), Anton Vayvod, and Mark Foltz for help with editing, reviews and
-        feedback to this draft.
-      </p>
-    </section>
+  </section>
+  <section>
+    <h2>
+      Examples
+    </h2>
+      <section>
+        <h3>
+          Initialization
+        </h3>
+          <pre class="example highlight">
+&lt;script&gt;
+  function onload() {
+    iap.init({channel:"GooglePlay", key:"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsEVjLWKJ5B7EKjnH5NV"}).then(function() {
+      document.getElementById("resultDiv").innerHTML = "Initialization finished.";
+    }).catch(function(e) {
+      console.log(e.name);
+    });
+  }
+&lt;/script&gt;
+
+&lt;body onload='onload()'&gt;
+  &lt;div id="resultDiv"&gt;&lt;/div&gt;
+&lt;/body&gt;
+          </pre>
+       </section>
+       <section>
+        <h3>
+          Query and buy a product example
+        </h3>
+          <pre class="example highlight">
+&lt;script&gt;
+  function queryProduct() {
+    iap.queryProductsInfo(["facebook"])).then(function(products) {
+    document.getElementById("resultDiv").innerHTML = "";
+    for (var i=0; i&lt;products.length; i++) {
+      var productId = "ID: " + products[i]["productId"] + "&lt;br&gt;";
+      var price = "Price: " + products[i]["price"] + "&lt;br&gt;";
+      var description = "Description: " products[i]["description"] + "&lt;br&gt;";
+      document.getElementById("resultDiv").innerHTML += productId + price + description;
+    }}).catch(function(e) {
+      console.log(e.name);
+    });
+  }
+  
+  function purchaseProduct() {
+    iap.buy({productId:"facebook"}).then(function(result)) {
+      document.getElementById("resultDiv").innerHTML = "";
+      var transactionId = "Transaction: " + result["transactionId"] + "&lt;br&gt;";
+      var receipt = "Receipt: " + result["productReceipt"] + "&lt;br&gt;";
+      document.getElementById("resultDiv").innerHTML += transactionId + receipt;
+    }).catch(function(e) {
+      console.log(e.name);
+    });
+  }
+&lt;/script&gt;
+
+&lt;body&gt;
+  &lt;button id="queryBtn" style="display: none;" onclick="queryProduct()"&gt;Query Product&lt;/button&gt;
+  &lt;button id="purchaseBtn" style="display: none;" onclick="purchaseProduct()"&gt;Purchase Product&lt;/button&gt;
+  &lt;div id="resultDiv"&gt;&lt;/div&gt;
+&lt;/body&gt;
+				</pre>
+      </section>
+    	<section>
+        <h3>
+          Get and validate receipt example
+        </h3>
+          <pre class="example highlight">
+&lt;script&gt;
+  function getReceipt() {
+    iap.getReceipt().then(function(receipt) {
+      iap.validateReceipt(receipt).then(function() {
+        document.getElementById("resultDiv").innerHTML = "Validation passed!";
+      }).catch(function() {
+        document.getElementById("resultDiv").innerHTML = "Validation failed!";
+      });
+    }).catch(function(e) {
+      console.log(e.name);
+    });
+  }
+&lt;/script&gt;
+
+&lt;body&gt;
+  &lt;button id="queryBtn" style="display: none;" onclick="getReceipt()"&gt;Get and Validate receipt&lt;/button&gt;
+  &lt;div id="resultDiv"&gt;&lt;/div&gt;
+&lt;/body&gt;
+				</pre>
+      </section>
+  </section>
   </body>
 </html>
