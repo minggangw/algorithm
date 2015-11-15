@@ -232,7 +232,7 @@
                 </li>
               </ol>
             </li>
-            <li>If the specified channel is not suppportd, then:
+            <li>If the specified channel is not suppported, then:
               <ol>
                 <li><a>Reject</a> <em>P</em> whith a DOMExpection named <code>"NotSupportedError"</code>.
                 </li>
@@ -259,6 +259,24 @@
             <code>iap</code> will get the detailed informations of the products, run the following
             steps:
           </p>
+          <dl>
+            <dt>
+              Input
+            </dt>
+            <dd>
+              <code>presentationRequest</code>, the
+              <code>PresentationRequest</code> object
+            </dd>
+            <dd>
+              <code>presentationUrl</code>, the <a>presentation request URL</a>
+            </dd>
+            <dt>
+              Output
+            </dt>
+            <dd>
+              <em>P</em>, a <a>Promise</a>
+            </dd>
+          </dl>
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
@@ -317,6 +335,24 @@
             When <code><dfn for="IAP">buy</dfn>(purchase)</code> method is called,
             <code>iap</code> will buy the assigned product. 
           </p>
+          <dl>
+            <dt>
+              Input
+            </dt>
+            <dd>
+              <code>presentationRequest</code>, the
+              <code>PresentationRequest</code> object
+            </dd>
+            <dd>
+              <code>presentationUrl</code>, the <a>presentation request URL</a>
+            </dd>
+            <dt>
+              Output
+            </dt>
+            <dd>
+              <em>P</em>, a <a>Promise</a>
+            </dd>
+          </dl>
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
@@ -353,6 +389,24 @@
             When <code><dfn for="IAP">getReceipt</dfn>()</code> method is called,
             <code>iap</code> will return the receipt of the corresponding channel.
           </p>
+          <dl>
+            <dt>
+              Input
+            </dt>
+            <dd>
+              <code>presentationRequest</code>, the
+              <code>PresentationRequest</code> object
+            </dd>
+            <dd>
+              <code>presentationUrl</code>, the <a>presentation request URL</a>
+            </dd>
+            <dt>
+              Output
+            </dt>
+            <dd>
+              <em>P</em>, a <a>Promise</a>
+            </dd>
+          </dl>
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
@@ -382,6 +436,24 @@
             When <code><dfn for="IAP">validateReceipt</dfn>()</code> method is called,
             <code>iap</code> will validate the receipt.
           </p>
+          <dl>
+            <dt>
+              Input
+            </dt>
+            <dd>
+              <code>presentationRequest</code>, the
+              <code>PresentationRequest</code> object
+            </dd>
+            <dd>
+              <code>presentationUrl</code>, the <a>presentation request URL</a>
+            </dd>
+            <dt>
+              Output
+            </dt>
+            <dd>
+              <em>P</em>, a <a>Promise</a>
+            </dd>
+          </dl>
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
@@ -411,6 +483,24 @@
             When <code><dfn for="IAP">restore</dfn>()</code> method is called,
             <code>iap</code> will restore the previous purchases.
           </p>
+          <dl>
+            <dt>
+              Input
+            </dt>
+            <dd>
+              <code>presentationRequest</code>, the
+              <code>PresentationRequest</code> object
+            </dd>
+            <dd>
+              <code>presentationUrl</code>, the <a>presentation request URL</a>
+            </dd>
+            <dt>
+              Output
+            </dt>
+            <dd>
+              <em>P</em>, a <a>Promise</a>
+            </dd>
+          </dl>
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
@@ -456,8 +546,22 @@
           <dt>DOMString key</dt>
           <dd>The public licensing key of this application if it exists.</dd>
         </dl>
-        <p>
-        	A Product dictionary represents
+        <p> 
+        	A <a>Product</a> dictionary represents a thing sold in the application, which could be
+          <ul>
+            <li>
+              Content
+            </li>
+            <li>
+              Functionality
+            </li>
+            <li>
+              Services
+            </li>
+            <li>
+              Subscriptions
+            </li>
+          </ul>
         </p>
         <dl class="idl" title="dictionary Product">
           <dt>DOMString productId</dt>
@@ -472,7 +576,8 @@
           <dd>The price of the product.</dd>
         </dl>
         <p>
-        	A PurchaseResult dictionary represents
+        	A <a>PurchaseResult</a> dictionary represents the result of purchase or result when users restore
+          transactions to maintain access to content they've already purchased. 
         </p>
         <dl class="idl" title="dictionary PurchaseResult">
           <dt>DOMString productId</dt>
@@ -489,7 +594,7 @@
           <dd>The state of the purchase.</dd>
         </dl>
         <p>
-        	A PurchaseInfo dictionary represents
+        	A <a>PurchaseInfo</a> dictionary represents the detailed information of the order.
         </p>
         <dl class="idl" title="dictionary PurchaseInfo">
           <dt>DOMString productId</dt>
@@ -512,7 +617,7 @@
     </h2>
       <section>
         <h3>
-          Initialization
+          Initialization example
         </h3>
           <pre class="example highlight">
 &lt;script&gt;
