@@ -150,13 +150,6 @@
       </h2>
       <section>
         <h3>
-          Common idioms
-        </h3>
-
-      </section>
-     
-      <section>
-        <h3>
           Interface <a><code>IAP</code></a>
         </h3>
         <pre class="idl">
@@ -171,14 +164,11 @@
         </p>
         <pre class="idl">
           interface IAP : EventTarget {
-            // Initialize the purchase.
             Promise&lt;void&gt; init(InitOptions options);
-
-            // Operations.
             Promise&lt;DOMString&gt; getReceipt();
             Promise&lt;void&gt; validateReceipt(DOMString receipt);
             Promise&lt;PurchaseResult&gt; restore();
-            Promise&lt;PurchaseResult&gt; buy(PurchaseInfo purchase);
+            Promise&lt;PurchaseResult&gt; purchase(Order order);
             Promise&lt;sequence&lt;Product&gt;&gt; queryProductsInfo(sequence&lt;DOMString&gt; productIds);
           };
 				</pre>
@@ -189,18 +179,15 @@
           </h4>
           <p>
             When <code><dfn for="IAP">init</dfn>(options)</code> method is called, <code>iap</code> will
-            be initiated by the given parameter <code>options</code>, which assigns the channel to select.
+            be initiated by the given parameter <code>options</code>.
           </p>
           <dl>
             <dt>
               Input
             </dt>
             <dd>
-              <code>presentationRequest</code>, the
-              <code>PresentationRequest</code> object
-            </dd>
-            <dd>
-              <code>presentationUrl</code>, the <a>presentation request URL</a>
+              <code>options</code>, the
+              <a><code>InitOptions</code></a> dictionary
             </dd>
             <dt>
               Output
@@ -214,7 +201,7 @@
                 a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
             <li>
-              If the <a href="#widl-InitOptions-channel">channel</a> is empty, return a <a>Promise</a> rejected with a DOMExpection
+              If the value of key <code><a href="#widl-InitOptions-channel">channel</a></code> is empty, return a <a>Promise</a> rejected with a DOMExpection
               named <code>"InvalidAccessError"</code>.
             </li>
             <li>
@@ -232,13 +219,13 @@
                 </li>
               </ol>
             </li>
-            <li>If the specified channel is not suppported, then:
+            <li>If the specified <code><a href="#widl-InitOptions-channel">channel</a></code> is not suppported, then:
               <ol>
-                <li><a>Reject</a> <em>P</em> whith a DOMExpection named <code>"NotSupportedError"</code>.
+                <li><a>Reject</a> <em>P</em> with a DOMExpection named <code>"NotSupportedError"</code>.
                 </li>
               </ol>
             </li>
-            <li>If the error occurs during initialization, then:
+            <li>If an error occurs during initialization, then:
               <ol>
                 <li>
                   <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
@@ -256,19 +243,14 @@
           </h4>
           <p>
             When <code><dfn for="IAP">queryProductsInfo</dfn>(producdIds)</code> method is called,
-            <code>iap</code> will get the detailed informations of the products, run the following
-            steps:
+            <code>iap</code> will get the detailed informations of the products passed in the array.
           </p>
           <dl>
             <dt>
               Input
             </dt>
             <dd>
-              <code>presentationRequest</code>, the
-              <code>PresentationRequest</code> object
-            </dd>
-            <dd>
-              <code>presentationUrl</code>, the <a>presentation request URL</a>
+              <code>producdIds</code>, an array of the product's Ids you want to query.
             </dd>
             <dt>
               Output
@@ -282,8 +264,8 @@
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
                 a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
-            <li>If the productIds is empty, return a <a>Promise</a> rejected with a DOMExpection whose
-                name is <code>"IndexSizeError"</code>.
+            <li>If the <code>productIds</code> is undefined, return a <a>Promise</a> rejected with a DOMExpection whose
+                name is <code>"InvalidAccessError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -292,7 +274,7 @@
               Return <em>P</em>.
             </li>
             <li>
-              Query the information.
+              Query the product by Id.
             </li>
             <li>
               If an error occurs then:
@@ -309,7 +291,7 @@
                   Let <em>array</em> be an empty array.
                 </li>
                 <li>
-                  For each product, add <a href="#idl-def-Product">product</a> to <em>array</em>
+                  For each <a href="#idl-def-Product">product</a> detail, add it to the <em>array</em>
                 </li>
                 <li>
                   <a>Resolve</a> <em>P</em> with <em>array</em>.
@@ -317,34 +299,21 @@
               </ol>
             </li>
           </ol>
-          <div class="note">
-            No specific transport for the connection between the <a>controlling
-            browsing context</a> and the <a>presenting browsing context</a> is
-            mandated, except that for multiple calls to <code><a for=
-            "PresentationSession">send</a>()</code> it has to be ensured that
-            messages are delivered to the other end reliably and in sequence.
-            The transport should function equivalently to an
-            <a><code>RTCDataChannel</code></a> in reliable mode.
-          </div>
         </section>
         <section>
           <h4>
             Purchasing a product.
           </h4>
           <p>
-            When <code><dfn for="IAP">buy</dfn>(purchase)</code> method is called,
-            <code>iap</code> will buy the assigned product. 
+            When <code><dfn for="IAP">purchase</dfn>(order)</code> method is called,
+            <code>iap</code> will process the order. 
           </p>
           <dl>
             <dt>
               Input
             </dt>
             <dd>
-              <code>presentationRequest</code>, the
-              <code>PresentationRequest</code> object
-            </dd>
-            <dd>
-              <code>presentationUrl</code>, the <a>presentation request URL</a>
+              <code>order</code>, an order specifies the purchase.
             </dd>
             <dt>
               Output
@@ -359,14 +328,22 @@
               a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
             <li>
-              If the <a href="#widl-PurchaseResult-productId">productId</a> is undefined, return a 
-              promise return a <a>Promise</a> rejected with a DOMExpection named <code>"InvalidAccessError"</code>.
+              If the <a href="#widl-PurchaseResult-productId">productId</a> is undefined,
+              return a <a>Promise</a> rejected with a DOMExpection named <code>"InvalidAccessError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
             </li>
             <li>
               Return <em>P</em>.
+            </li>
+            <li>
+              If an error occurs then:
+              <ol>
+                <li>
+                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+                </li>
+              </ol>
             </li>
             <li>
               If buying the product successfully, then run the following steps:
@@ -387,18 +364,18 @@
           </h4>
           <p>
             When <code><dfn for="IAP">getReceipt</dfn>()</code> method is called,
-            <code>iap</code> will return the receipt of the corresponding channel.
+            <code>iap</code> will return the receipt of the in-app purchase.
           </p>
+          <div class="note">
+          	The receipt could be considered as a record of the purchase in the app. After purchasing
+          	the product, you can use this receipt to continue to make it available.
+        	</div>
           <dl>
             <dt>
               Input
             </dt>
             <dd>
-              <code>presentationRequest</code>, the
-              <code>PresentationRequest</code> object
-            </dd>
-            <dd>
-              <code>presentationUrl</code>, the <a>presentation request URL</a>
+            	No parameters.
             </dd>
             <dt>
               Output
@@ -417,6 +394,14 @@
             </li>
             <li>
               Return <em>P</em>.
+            </li>
+            <li>
+              If an error occurs then:
+              <ol>
+                <li>
+                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+                </li>
+              </ol>
             </li>
             <li>
             	If getting the receipt successfully, then run the following steps:
@@ -433,19 +418,19 @@
             Validating the receipt.
           </h4>
           <p>
-            When <code><dfn for="IAP">validateReceipt</dfn>()</code> method is called,
+            When <code><dfn for="IAP">validateReceipt</dfn>(receipt)</code> method is called,
             <code>iap</code> will validate the receipt.
           </p>
+          <div class="note">
+          	By passing the receipt return by <code>getReceipt</code>() to this method, you can
+          	validate it to prevent unauthorized copies from running.
+        	</div>
           <dl>
             <dt>
               Input
             </dt>
             <dd>
-              <code>presentationRequest</code>, the
-              <code>PresentationRequest</code> object
-            </dd>
-            <dd>
-              <code>presentationUrl</code>, the <a>presentation request URL</a>
+							<code>receipt</code>, DOMString.
             </dd>
             <dt>
               Output
@@ -464,6 +449,14 @@
             </li>
             <li>
               Return <em>P</em>.
+            </li>
+            <li>
+              If an error occurs then:
+              <ol>
+                <li>
+                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+                </li>
+              </ol>
             </li>
             <li>
             	If getting the receipt successfully, then run the following steps:
@@ -488,11 +481,7 @@
               Input
             </dt>
             <dd>
-              <code>presentationRequest</code>, the
-              <code>PresentationRequest</code> object
-            </dd>
-            <dd>
-              <code>presentationUrl</code>, the <a>presentation request URL</a>
+							No parameters.
             </dd>
             <dt>
               Output
@@ -532,6 +521,10 @@
               </ol>
             </li>
           </ol>
+        <div class="note">
+        	Restoring occurs, for example, when users upgrade their device to
+        	a new one, they don't lose all of the items which were purchansed on the old device.
+        </div>
         </section>
 
         <section>
@@ -546,6 +539,11 @@
           <dt>DOMString key</dt>
           <dd>The public licensing key of this application if it exists.</dd>
         </dl>
+        <div class="note">
+					The <code>channel</code> means the store from which you want to purchase product. Once
+					the <code>iap</code> is bound to a specified <code>channel</code>, it can't be changed
+					in the context.
+        </div>
         <p> 
         	A <a>Product</a> dictionary represents a thing sold in the application, which could be
           <ul>
@@ -565,11 +563,11 @@
         </p>
         <dl class="idl" title="dictionary Product">
           <dt>DOMString productId</dt>
-          <dd>The ID of the product.</dd>
+          <dd>The Id of the product.</dd>
           <dt>DOMString title</dt>
           <dd>The title of the product.</dd>
           <dt>DOMString description</dt>
-          <dd>A simple description of the product.</dd>
+          <dd>A detailed description of the product.</dd>
           <dt>DOMString currencyCode</dt>
           <dd>The currency code of this product used.</dd>
           <dt>double price</dt>
@@ -581,9 +579,9 @@
         </p>
         <dl class="idl" title="dictionary PurchaseResult">
           <dt>DOMString productId</dt>
-          <dd>The ID of the purchased product.</dd>
+          <dd>The Id of the purchased product.</dd>
           <dt>DOMString transactionId</dt>
-          <dd>The transaction ID of this purchase used.</dd>
+          <dd>The transaction Id of this purchase used.</dd>
           <dt>DOMString productReceipt</dt>
           <dd>The receipt of the purchased product.</dd>
           <dt>DOMString packageName</dt>
@@ -594,19 +592,19 @@
           <dd>The state of the purchase.</dd>
         </dl>
         <p>
-        	A <a>PurchaseInfo</a> dictionary represents the detailed information of the order.
+        	A <a>Order</a> dictionary represents the detailed information used to purchase the product.
         </p>
-        <dl class="idl" title="dictionary PurchaseInfo">
+        <dl class="idl" title="dictionary Order">
           <dt>DOMString productId</dt>
-          <dd>The ID of the purchased product.</dd>
+          <dd>The Id of the purchased product.</dd>
           <dt>DOMString userInfo</dt>
-          <dd>The information of the user.</dd>
+          <dd>Additional information of the user to be attached to the order.</dd>
           <dt>unsigned long count</dt>
           <dd>The quantity of the product.</dd>
           <dt>double price</dt>
           <dd>The price of the product.</dd>
           <dt>dictionary extraInfo</dt>
-          <dd>Additional information used to descript the purchase.</dd>
+          <dd>Additional information used to be attached to the order.</dd>
         </dl>
       </section>
     </section>
@@ -622,7 +620,7 @@
           <pre class="example highlight">
 &lt;script&gt;
   function onload() {
-    iap.init({channel:"GooglePlay", key:"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsEVjLWKJ5B7EKjnH5NV"}).then(function() {
+    navigator.iap.init({channel:"GooglePlay", key:"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsEVjLWKJ5B7EKjnH5NV"}).then(function() {
       document.getElementById("resultDiv").innerHTML = "Initialization finished.";
     }).catch(function(e) {
       console.log(e.name);
@@ -642,7 +640,7 @@
           <pre class="example highlight">
 &lt;script&gt;
   function queryProduct() {
-    iap.queryProductsInfo(["facebook"])).then(function(products) {
+    navigator.iap.queryProductsInfo(["facebook"])).then(function(products) {
     document.getElementById("resultDiv").innerHTML = "";
     for (var i=0; i&lt;products.length; i++) {
       var productId = "ID: " + products[i]["productId"] + "&lt;br&gt;";
@@ -655,7 +653,7 @@
   }
   
   function purchaseProduct() {
-    iap.buy({productId:"facebook"}).then(function(result)) {
+    navigator.iap.purchase({productId:"facebook"}).then(function(result)) {
       document.getElementById("resultDiv").innerHTML = "";
       var transactionId = "Transaction: " + result["transactionId"] + "&lt;br&gt;";
       var receipt = "Receipt: " + result["productReceipt"] + "&lt;br&gt;";
@@ -680,8 +678,8 @@
           <pre class="example highlight">
 &lt;script&gt;
   function getReceipt() {
-    iap.getReceipt().then(function(receipt) {
-      iap.validateReceipt(receipt).then(function() {
+    navigator.iap.getReceipt().then(function(receipt) {
+      navigator.iap.validateReceipt(receipt).then(function() {
         document.getElementById("resultDiv").innerHTML = "Validation passed!";
       }).catch(function() {
         document.getElementById("resultDiv").innerHTML = "Validation failed!";
