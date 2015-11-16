@@ -274,7 +274,7 @@
               Return <em>P</em>.
             </li>
             <li>
-              Query the product by Id.
+              Query the product by its id.
             </li>
             <li>
               If an error occurs then:
@@ -328,7 +328,7 @@
               a DOMExpection named <code>"InvalidStateError"</code>.
             </li>
             <li>
-              If the <a href="#widl-PurchaseResult-productId">productId</a> is undefined,
+              If the value of key <a href="#widl-PurchaseResult-productId">productId</a> is undefined,
               return a <a>Promise</a> rejected with a DOMExpection named <code>"InvalidAccessError"</code>.
             </li>
             <li>
@@ -366,10 +366,6 @@
             When <code><dfn for="IAP">getReceipt</dfn>()</code> method is called,
             <code>iap</code> will return the receipt of the in-app purchase.
           </p>
-          <div class="note">
-          	The receipt could be considered as a record of the purchase in the app. After purchasing
-          	the product, you can use this receipt to continue to make it available.
-        	</div>
           <dl>
             <dt>
               Input
@@ -412,6 +408,10 @@
               </ol>
             </li>
           </ol>
+          <div class="note">
+            The receipt could be considered as a record of the purchase in the app. After purchasing
+            the product, you can use this receipt to continue to make it available.
+          </div>
         </section>
         <section>
           <h4>
@@ -421,10 +421,6 @@
             When <code><dfn for="IAP">validateReceipt</dfn>(receipt)</code> method is called,
             <code>iap</code> will validate the receipt.
           </p>
-          <div class="note">
-          	By passing the receipt return by <code>getReceipt</code>() to this method, you can
-          	validate it to prevent unauthorized copies from running.
-        	</div>
           <dl>
             <dt>
               Input
@@ -467,6 +463,10 @@
               </ol>
             </li>
           </ol>
+          <div class="note">
+            By passing the receipt returned by <code>getReceipt</code>(), you can
+            validate it to prevent unauthorized copies from running.
+          </div>
         </section>
         <section>
           <h4>
@@ -592,7 +592,7 @@
           <dd>The state of the purchase.</dd>
         </dl>
         <p>
-        	A <a>Order</a> dictionary represents the detailed information used to purchase the product.
+        	An <a>Order</a> dictionary represents the detailed information used to purchase the product.
         </p>
         <dl class="idl" title="dictionary Order">
           <dt>DOMString productId</dt>
