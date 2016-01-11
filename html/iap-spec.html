@@ -5,7 +5,8 @@
     <title>
       In-App Purchase API
     </title>
-    <script src='../js/require.js' data-main='../js/profile-w3c-common' async class='remove'></script>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common'
+            async class='remove'></script>
     <script class="remove">
     var respecConfig = {
         specStatus: 'ED',
@@ -108,10 +109,9 @@
         Introduction
       </h2>
       <p>
-      	This specification aims to make In-App Purchase(IAP) such as Google Play or Apple Store,
-      	available to the Web. Nowadays, user can purchase virtual goods within paid or free
-      	apps. The app can offer customers additional digital content, functionality, services
-      	and even subscriptions.
+      	This specification aims to make <dfn>In-App Purchase</dfn>(IAP), such as buying virtual goods on Google Play
+      	or Apple Store, available to the web. Thus, user can purchase  additional digital content,
+      	functionality, services and even subscriptions within paid or free web apps.
       </p>
       <p>
       	At its core, the <a href="#idl-def-iap"><code>iap</code></a> enables all necessary
@@ -125,14 +125,8 @@
       </h2>
       <p>
         This document provides interface definitions using the Web IDL standard
-        ([[!WEBIDL]]). The terms <dfn><a href=
-        "https://heycam.github.io/webidl/#idl-promise">Promise</a></dfn>,
-        <dfn><a href=
-        "http://heycam.github.io/webidl/#idl-ArrayBuffer">ArrayBuffer</a></dfn>,
-        <dfn><a href=
-        "http://heycam.github.io/webidl/#idl-ArrayBufferView">ArrayBufferView</a></dfn>
-        and <dfn><a href=
-        "http://heycam.github.io/webidl/#idl-DOMException">DOMException</a></dfn>
+        ([[!WEBIDL]]). The terms <dfn><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a></dfn>
+        and <a href="http://heycam.github.io/webidl/#idl-DOMException"><dfn>DOMException</dfn></a>
         are defined in [[!WEBIDL]].
       </p>
       <p>
@@ -165,11 +159,11 @@
         <pre class="idl">
           interface IAP : EventTarget {
             Promise&lt;void&gt; init(InitOptions options);
-            Promise&lt;DOMString&gt; getReceipt();
-            Promise&lt;void&gt; validateReceipt(DOMString receipt);
-            Promise&lt;PurchaseResult&gt; restore();
-            Promise&lt;PurchaseResult&gt; purchase(Order order);
             Promise&lt;sequence&lt;Product&gt;&gt; queryProductsInfo(sequence&lt;DOMString&gt; productIds);
+            Promise&lt;PurchaseResult&gt; purchase(Order order);
+            Promise&lt;DOMString&gt; getReceipt();
+            Promise&lt;void&gt; validateReceipt();
+            Promise&lt;sequence&lt;DOMString&gt;&gt; restore();
           };
 				</pre>
 
@@ -198,11 +192,10 @@
           </dl>
           <ol>
             <li>If the <code>iap</code> has already been initialized, return a <a>Promise</a> rejected with
-                a DOMExpection named <code>"InvalidStateError"</code>.
+                a <a>DOMException</a> named <code>"InvalidStateError"</code>.
             </li>
             <li>
-              If the value of key <code><a href="#widl-InitOptions-channel">channel</a></code> is empty, return a <a>Promise</a> rejected with a DOMExpection
-              named <code>"InvalidAccessError"</code>.
+              If the value of key <code><a href="#widl-InitOptions-channel">channel</a></code> is undefined, return a <a>Promise</a> rejected with a <a>DOMException</a> named <code>"InvalidAccessError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -221,14 +214,14 @@
             </li>
             <li>If the specified <code><a href="#widl-InitOptions-channel">channel</a></code> is not suppported, then:
               <ol>
-                <li><a>Reject</a> <em>P</em> with a DOMExpection named <code>"NotSupportedError"</code>.
+                <li><a>Reject</a> <em>P</em> with a <a>DOMException</a> named <code>"NotSupportedError"</code>.
                 </li>
               </ol>
             </li>
             <li>If an error occurs during initialization, then:
               <ol>
                 <li>
-                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+                  <a>Reject</a> <em>P</em> with a <a>DOMException</a> named <code>"OperationError"</code>.
                 </li>
               </ol>
             </li>
@@ -243,7 +236,8 @@
           </h4>
           <p>
             When <code><dfn for="IAP">queryProductsInfo</dfn>(producdIds)</code> method is called,
-            <code>iap</code> will get the detailed informations of the products passed in the array.
+            <code>iap</code> will get the detailed informations of the products by their Ids passed
+            in the array.
           </p>
           <dl>
             <dt>
@@ -262,9 +256,9 @@
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
-                a DOMExpection named <code>"InvalidStateError"</code>.
+                a <a>DOMException</a> named <code>"InvalidStateError"</code>.
             </li>
-            <li>If the <code>productIds</code> is undefined, return a <a>Promise</a> rejected with a DOMExpection whose
+            <li>If the <code>productIds</code> is undefined, return a <a>Promise</a> rejected with a <a>DOMException</a> whose
                 name is <code>"InvalidAccessError"</code>.
             </li>
             <li>
@@ -280,7 +274,7 @@
               If an error occurs then:
               <ol>
                 <li>
-                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+                  <a>Reject</a> <em>P</em> with a <a>DOMException</a> named <code>"OperationError"</code>.
                 </li>
               </ol>
             </li>
@@ -313,7 +307,7 @@
               Input
             </dt>
             <dd>
-              <code>order</code>, an order specifies the purchase.
+              <code>order</code>, an order which specifies the purchase.
             </dd>
             <dt>
               Output
@@ -325,11 +319,11 @@
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
-              a DOMExpection named <code>"InvalidStateError"</code>.
+              a <a>DOMException</a> named <code>"InvalidStateError"</code>.
             </li>
             <li>
               If the value of key <a href="#widl-PurchaseResult-productId">productId</a> is undefined,
-              return a <a>Promise</a> rejected with a DOMExpection named <code>"InvalidAccessError"</code>.
+              return a <a>Promise</a> rejected with a <a>DOMException</a> named <code>"InvalidAccessError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -341,7 +335,7 @@
               If an error occurs then:
               <ol>
                 <li>
-                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+                  <a>Reject</a> <em>P</em> with a <a>DOMException</a> named <code>"OperationError"</code>.
                 </li>
               </ol>
             </li>
@@ -349,7 +343,7 @@
               If buying the product successfully, then run the following steps:
               <ol>
                 <li>
-                  Let <em>S</em> be the pruchased <a href="#idl-def-Product">product</a>.
+                  Let <em>S</em> be the <a>PurchaseResult</a>.
                 </li>
                 <li>
                 <a>Resolve</a> <em>P</em> with <em>S</em>.
@@ -364,7 +358,7 @@
           </h4>
           <p>
             When <code><dfn for="IAP">getReceipt</dfn>()</code> method is called,
-            <code>iap</code> will return the receipt of the in-app purchase.
+            <code>iap</code> will get the receipt of the in-app purchase.
           </p>
           <dl>
             <dt>
@@ -383,7 +377,7 @@
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
-              a DOMExpection named <code>"InvalidStateError"</code>.
+              a <a>DOMException</a> named <code>"InvalidStateError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -395,7 +389,7 @@
               If an error occurs then:
               <ol>
                 <li>
-                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+                  <a>Reject</a> <em>P</em> with a <a>DOMException</a> named <code>"OperationError"</code>.
                 </li>
               </ol>
             </li>
@@ -418,7 +412,7 @@
             Validating the receipt.
           </h4>
           <p>
-            When <code><dfn for="IAP">validateReceipt</dfn>(receipt)</code> method is called,
+            When <code><dfn for="IAP">validateReceipt</dfn>()</code> method is called,
             <code>iap</code> will validate the receipt.
           </p>
           <dl>
@@ -438,7 +432,7 @@
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
-              a DOMExpection named <code>"InvalidStateError"</code>.
+              a <a>DOMException</a> named <code>"InvalidStateError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -450,22 +444,36 @@
               If an error occurs then:
               <ol>
                 <li>
-                  <a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+                  <a>Reject</a> <em>P</em> with a <a>DOMException</a> named <code>"OperationError"</code>.
                 </li>
               </ol>
             </li>
             <li>
             	If getting the receipt successfully, then run the following steps:
-              <ol>
-                <li>
-                  <a>Resolve</a> <em>P</em> with the receipt.
-                </li>
-              </ol>
+    						<ol>
+	                <li>
+	                	If the receipt is invalid, then:
+  	    						<ol>
+	                		<li>
+	                  		<a>Reject</a> <em>P</em> with a <a>DOMException</a> named <code>"AbortError"</code>.
+	                  	</li>
+	                  </ol>
+	                </li>
+                </ol>
+                <ol>
+	                <li>
+	                	If the receipt is valid, then:
+  	    						<ol>
+	                		<li>
+	                  		<a>Resolve</a> <em>P</em>.
+	                  	</li>
+	                  </ol>
+	                </li>
+                </ol>
             </li>
           </ol>
           <div class="note">
-            By passing the receipt returned by <code>getReceipt</code>(), you can
-            validate it to prevent unauthorized copies from running.
+            Validating the receipt can help to prevent unauthorized copies from running.
           </div>
         </section>
         <section>
@@ -493,7 +501,7 @@
           <ol>
             <li>
               If the <code>iap</code> has not been initialized, return a <a>Promise</a> rejected with
-              a DOMExpection named <code>"InvalidStateError"</code>.
+              a <a>DOMException</a> named <code>"InvalidStateError"</code>.
             </li>
             <li>
               Let <em>P</em> be a new <a>Promise</a>.
@@ -505,7 +513,7 @@
             	If the task fails, run the following steps:
             	<ol>
             		<li>
-            			<a>Reject</a> <em>P</em> with a DOMException named <code>"OperationError"</code>.
+            			<a>Reject</a> <em>P</em> with a <a>DOMException</a> named <code>"OperationError"</code>.
             		</li>
             	</ol>
             </li>
@@ -513,7 +521,7 @@
               If restoring successfully, then run the following steps:
               <ol>
                 <li>
-                  Let <em>S</em> be the restored <a href="#idl-def-Product">product</a>.
+                  Let <em>S</em> be the array of restored product ID.
                 </li>
                 <li>
                 <a>Resolve</a> <em>P</em> with  <em>S</em>.
@@ -679,19 +687,21 @@
 &lt;script&gt;
   function getReceipt() {
     navigator.iap.getReceipt().then(function(receipt) {
-      navigator.iap.validateReceipt(receipt).then(function() {
-        document.getElementById("resultDiv").innerHTML = "Validation passed!";
-      }).catch(function() {
-        document.getElementById("resultDiv").innerHTML = "Validation failed!";
-      });
+      document.getElementById("resultDiv").innerHTML = receipt;
     }).catch(function(e) {
       console.log(e.name);
     });
-  }
+
+  function validateReceipt().then(function() {
+    document.getElementById("resultDiv").innerHTML = "Validation passed!";
+  }).catch(function(e.name) {
+    console.log(e.name);
+  });
 &lt;/script&gt;
 
 &lt;body&gt;
-  &lt;button id="queryBtn" style="display: none;" onclick="getReceipt()"&gt;Get and Validate receipt&lt;/button&gt;
+  &lt;button id="getBtn" style="display: none;" onclick="getReceipt()"&gt;receipt&lt;/button&gt;
+  &lt;button id="validateBtn" style="display: none;" onclick="validateReceipt()"&gt;Validate receipt&lt;/button&gt;
   &lt;div id="resultDiv"&gt;&lt;/div&gt;
 &lt;/body&gt;
 				</pre>
