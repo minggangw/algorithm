@@ -14,6 +14,7 @@
 2. Change ```"xwalk_package_id"``` to ```"com.sdk.migame.payment"``` in manifest.json.
    Change ```"xwalk_extensions"``` to the path of the extensions in manifest.json.
    Add the additional permissions in your default AndroidManifest.xml.
+
     ```
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="com.xiaomi.sdk.permission.PAYMENT"/>
