@@ -3,7 +3,8 @@
 2. Change ```"xwalk_package_id"``` in manifest.json to the value below:
    * ```"com.crosswalk.iapsample"``` for Google Play.
    * ```"com.sdk.migame.payment"``` for XiaoMi Store.
-3. Change ```"xwalk_extensions"``` to the path of the extensions in manifest.json.
+3. Download the extension zip file from https://github.com/crosswalk-project/crosswalk-android-extensions/releases,
+   change ```"xwalk_extensions"``` to the path of the extensions in manifest.json.
 4. Add the following additional permissions in the default AndroidManifest.xml:
 
    ```
