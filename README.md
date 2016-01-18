@@ -16,6 +16,7 @@
    Add the additional permissions in your default AndroidManifest.xml.
     ```
     <uses-permission android:name="android.permission.GET_TASKS"/>
+    
     <uses-permission android:name="com.xiaomi.sdk.permission.PAYMENT"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     ```
