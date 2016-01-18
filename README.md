@@ -11,7 +11,6 @@
    <uses-permission android:name="android.permission.GET_TASKS"/>
    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
    <uses-permission android:name="com.xiaomi.sdk.permission.PAYMENT"/>
-
    ```
 5. Run ```crosswalk-pkg```:
     ```
