@@ -21,9 +21,9 @@ the ```assets``` folder of your project, please download it from http://file.mar
     ```
 6. Sign the apk manually, see https://developer.android.com/tools/publishing/app-signing.html#signing-manually for details.
 
-## For iOS platform.
+## Run example on iOS platform.
 1. Install the pods for the example.
-   ```
+   ```bash
    cd iOS
    pod install
    ```
